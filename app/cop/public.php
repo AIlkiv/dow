@@ -105,21 +105,25 @@ function createTreeSubCatV2($cat, $ignore, $depth, $origDepth, $parent)
   }
 }
 ?>
-<form action="https://tools.wmflabs.org/dow/">
+<h1>Категорії порталів</h1>
+<form class="form-inline" action="https://tools.wmflabs.org/dow/">
   <input type="hidden" name="view" value="cop"/>
-  <select name="portal">
-    <?php
-    foreach ($portals as $portal => $categies) {
-      echo "<option value='{$portal}' ".($curPortal == $portal ? 'selected' : '').">Портал:{$portal}</option>";
-    }
-    ?>
-  </select>
-  <button type="submit">Дивитися</button>
+  <div class="form-group">
+    <select name="portal" class="form-control">
+      <?php
+      foreach ($portals as $portal => $categies) {
+        echo "<option value='{$portal}' ".($curPortal == $portal ? 'selected' : '').">Портал:{$portal}</option>";
+      }
+      ?>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Дивитися</button>
 </form>
 
+<?php if (!empty($curPortal)): ?>
 <div class="row">
   <div class="col-md-6">
-  <?php if (!empty($curPortal)): ?>
+  <h2>Поточні категорії</h2>
   <dl class="dl-horizontal">
     <dt>Категорії:</dt>
     <dd><?=implode("\n", $portalCategories)?></dd>
@@ -137,6 +141,8 @@ function createTreeSubCatV2($cat, $ignore, $depth, $origDepth, $parent)
   </ul>
   </div>
   <div class="col-md-6">
+    <h2>Порівняти поточні з іншими налаштуваннями</h2>
+    <p class="text-muted">Ви можете вибрати нові параметри, і після натискання кнопки "Порівняти" система виведе список категорій, які з'являться/знукнуть якщо впровадити нові налаштування для поточного порталу</p>
     <form id="new_list">
       <div class="form-group">
         <label for="input-category">Категорії:</label>
@@ -157,12 +163,10 @@ function createTreeSubCatV2($cat, $ignore, $depth, $origDepth, $parent)
     <table class="table table-condensed" id ="result">
     </table>
   </div>
-  <?php endif ?>
 </div>
 
 <script>
-<?php if (!empty($curPortal)): ?>
-  var curCategories = <?=json_encode(array_keys($categories))?>
+var curCategories = <?=json_encode(array_keys($categories))?>
 
 $( document ).ready(function() {
   $(".parents_cat").on("click", function(e) {
@@ -223,5 +227,5 @@ $( document ).ready(function() {
       });
   });
 });
-<?php endif ?>
 </script>
+<?php endif ?>
