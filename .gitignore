@@ -3,3 +3,4 @@ tmp
 *.out
 *.log
 public_html/files/*
+public_html/pma/*

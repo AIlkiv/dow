@@ -1,13 +1,14 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once __DIR__.'/../config.php';
 //$pageListWidget = new Widget('page_list', $db);
 
 $allowedWidget = ['main', 'page_list', 'cop'];
 $widget = !empty($_GET['view']) && in_array($_GET['view'], $allowedWidget) ? $_GET['view'] : 'main';
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 ?>
 
 <!DOCTYPE html>

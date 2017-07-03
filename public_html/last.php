@@ -57,6 +57,10 @@ $portals = [
   ], 
 ];
 
+
+define('PAGE_EDITED', 1);
+define('PAGE_NEW', 2);
+
 $dateFrom = !empty($_GET['date_from']) ? date('Y-m-d', strtotime($_GET['date_from'])) : date('Y-m-d', strtotime('-1 DAY'));
 $dateTo = !empty($_GET['date_to']) ? date('Y-m-d', strtotime($_GET['date_to'])) : date('Y-m-d');
 
@@ -75,6 +79,7 @@ if (!empty($_GET['portal'])) {
   $curPortalData = $curPortalData['portal'];
 
   $curPortal = $_GET['portal'];
+  $curTypes = empty($_GET['type']) ? [PAGE_EDITED, PAGE_NEW] : [$db->quote($_GET['type'])];
   $categories = [];
   $depth = !empty($curPortalData['depth']) ? $curPortalData['depth'] : 3;
   $portalCategories = !empty($curPortalData['categories']) ? $curPortalData['categories'] : [$curPortal];
@@ -91,7 +96,7 @@ if (!empty($_GET['portal'])) {
 
   $sql = "SELECT ch.*
     FROM uk_categories_changes ch
-    WHERE ch.type = 1 AND ch.date BETWEEN {$db->quote($time['from'])} AND {$time['to']} AND ch.category IN (".implode(", ", $categories).") GROUP BY type, date, page_id ORDER BY ch.date DESC LIMIT 1000";
+    WHERE ch.type IN (".implode(", ", $curTypes).") AND ch.date BETWEEN {$db->quote($time['from'])} AND {$time['to']} AND ch.category IN (".implode(", ", $categories).") GROUP BY type, date, page_id ORDER BY ch.date DESC LIMIT 1000";
   $listRevisions = $db->query($sql)->fetchAll();
 
   $langDb = getLangWikiDb('uk');
@@ -132,28 +137,55 @@ if (!empty($_GET['portal'])) {
     }
   }
 
-  if (!empty($_GET['wiki'])) {
-    $i = 0;
-    foreach ($listRevisions as $row) {
-      if ($row['namespace'] == 14) {
-        continue;
-      }
-      if (!empty($lastPatrolDate[$row['page_id']]) && $lastPatrolDate[$row['page_id']] > $row['date']) {
-        continue;
-      }
-      if ($i++ > 150) {
-        break;
-      }
-      $page = !empty($pages[$row['page_id']]) ? $pages[$row['page_id']] : '';
-      if (empty($page)) {
-        continue;
-      }
-      $datetime = new DateTime($row['date']);
-      /*$la_time = new DateTimeZone('Europe/Kiev');
-      $datetime->setTimezone($la_time);*/
-      echo '{{Редагують зараз|'.(str_replace('_', ' ', $page)).'|'.$datetime->format('H:i, Y-m-d').'|'.(!empty($users[$row['user_id']]) ? $users[$row['user_id']] : 'IP').'}}';
+  if (!empty($_GET['response_type'])) {
+    switch ($_GET['response_type']) {
+      case 'wiki':
+        $i = 0;
+        foreach ($listRevisions as $row) {
+          if ($row['namespace'] == 14) {
+            continue;
+          }
+          if (!empty($lastPatrolDate[$row['page_id']]) && $lastPatrolDate[$row['page_id']] > $row['date']) {
+            continue;
+          }
+          if ($i++ > 150) {
+            break;
+          }
+          $page = !empty($pages[$row['page_id']]) ? $pages[$row['page_id']] : '';
+          if (empty($page)) {
+            continue;
+          }
+          $datetime = new DateTime($row['date']);
+          /*$la_time = new DateTimeZone('Europe/Kiev');
+          $datetime->setTimezone($la_time);*/
+          echo '{{Редагують зараз|'.(str_replace('_', ' ', $page)).'|'.$datetime->format('H:i, Y-m-d').'|'.(!empty($users[$row['user_id']]) ? $users[$row['user_id']] : 'IP').'}}';
+        }
+        exit;
+      case 'json':
+        $data = [];
+        foreach ($listRevisions as $row) {
+          if ($row['namespace'] == 14) {
+            continue;
+          }
+          if (!empty($lastPatrolDate[$row['page_id']]) && $lastPatrolDate[$row['page_id']] > $row['date']) {
+            continue;
+          }
+          if ($i++ > 150) {
+            break;
+          }
+          $page = !empty($pages[$row['page_id']]) ? $pages[$row['page_id']] : '';
+          if (empty($page)) {
+            continue;
+          }
+          $datetime = new DateTime($row['date']);
+          /*$la_time = new DateTimeZone('Europe/Kiev');
+          $datetime->setTimezone($la_time);*/
+          $data[] = ['title' => str_replace('_', ' ', $page), 'date' => $datetime->format('Y-m-d H:i'), 'user_id' => (!empty($users[$row['user_id']]) ? $users[$row['user_id']] : 'IP')];
+        }
+        echo json_encode(['status' => true, 'data' => $data]);
+        exit;
+
     }
-    exit;
   }
 }
 
