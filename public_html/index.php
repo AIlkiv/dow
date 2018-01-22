@@ -6,7 +6,7 @@ ini_set('display_errors', 1);
 require_once __DIR__.'/../config.php';
 //$pageListWidget = new Widget('page_list', $db);
 
-$allowedWidget = ['main', 'page_list', 'cop'];
+$allowedWidget = ['main', 'page_list', 'cop', 'view_stats'];
 $widget = !empty($_GET['view']) && in_array($_GET['view'], $allowedWidget) ? $_GET['view'] : 'main';
 
 ?>
@@ -45,36 +45,44 @@ $widget = !empty($_GET['view']) && in_array($_GET['view'], $allowedWidget) ? $_G
     <div class="container">
       <div class="header clearfix">
         <nav>
+	<?php /*
           <ul class="nav nav-pills pull-right">
             <li role="presentation" class="active"><a href="#">Home</a></li>
             <li role="presentation"><a href="#">About</a></li>
             <li role="presentation"><a href="#">Contact</a></li>
           </ul>
+*/?>
         </nav>
-        <h3 class="text-muted">DOW</h3>
+        <h3 class="text-muted"><a href="https://tools.wmflabs.org/dow/">DOW</a></h3>
       </div>
 
 <?php if ($widget == 'main'):?>
       <div class="jumbotron">
         <h1>DOW</h1>
+	<p class="lead">Data Of Wikipedia</p>
+	<?php /*
         <select>
           <option value='uk'>uk.wikipedia.org</option><option value='en'>en.wikipedia.org</option>        </select>
         <a href='/files/uk/2016-09-01.log'>month_log</a>        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
         <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>
+*/?>
       </div>
       <div class="row marketing">
         <div class="col-lg-6">
           <h4><a href="<?=MAIN_URL?>/?view=page_list">All Pages</a></h4>
-          <p>Dump all pages/redirects wint main namespace.</p>
+          <p>Dump all pages/redirects from main namespace.</p>
 
+	
+	  <h4><a href="<?=MAIN_URL?>/?view=cop">Categories of portal (only uk.wikipedia.org)</a></h4>
+          <p>A tool to view a list of categories that are relevant to the selected portal.</p>
+	<?php /*
           <h4>Subheading</h4>
-          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
-
-          <h4>Subheading</h4>
-          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+	  <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+	  */?>
         </div>
 
-        <div class="col-lg-6">
+	<div class="col-lg-6">
+	<?php /*
           <h4>Subheading</h4>
           <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
 
@@ -83,7 +91,8 @@ $widget = !empty($_GET['view']) && in_array($_GET['view'], $allowedWidget) ? $_G
 
           <h4>Subheading</h4>
           <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-        </div>
+*/?>
+	</div>
       </div>
 <?php else: ?>
 	<?php include_once ROOT_DIR."/app/{$widget}/public.php";?>

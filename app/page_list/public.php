@@ -17,6 +17,9 @@ switch ($pageListWidget->getSetting('status')) {
 		if (file_exists(ROOT_DIR."/public_html/files/page_list/{$lang}_{$_ym}_all_redirects.log")) {
 			$contents .= "<li><a href='".MAIN_URL."/files/page_list/{$lang}_{$_ym}_all_redirects.log'>all redirects</a></li>";
 		}
+		if (file_exists(ROOT_DIR."/public_html/files/page_list/{$lang}_{$_ym}_all_redirects_rel.log")) {
+			$contents .= "<li><a href='".MAIN_URL."/files/page_list/{$lang}_{$_ym}_all_redirects_rel.log'>all relations from redirectID to pageID</a></li>";
+		}
 		$contents .= "</ul>";
 	}
 	echo <<<"templ"

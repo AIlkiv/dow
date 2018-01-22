@@ -106,6 +106,8 @@ function createTreeSubCatV2($cat, $ignore, $depth, $origDepth, $parent)
 }
 ?>
 <h1>Категорії порталів</h1>
+<p>На даній сторінці можна переглянути, які категорії прив'язані до вибраного порталу. Ці списки категорій можна використовувати для сторонніх сервісів. Ці дані вже використовуються, щоб генерувати блоки "Редагують зараз" для різних порталів Української вікіпедії, наприклад <a href="https://uk.wikipedia.org/wiki/%D0%9F%D0%BE%D1%80%D1%82%D0%B0%D0%BB:%D0%A4%D1%96%D0%B7%D0%B8%D0%BA%D0%B0" target="_blank">Портал:Фізика</a><br/>
+Також, якщо ви вважаєте, що якась категорія помилково прив'язана до вибраного порталу, то, будь ласка, напишіть на пошту: ukrface.org@gmail.com </p>
 <form class="form-inline" action="https://tools.wmflabs.org/dow/">
   <input type="hidden" name="view" value="cop"/>
   <div class="form-group">

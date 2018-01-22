@@ -50,6 +50,7 @@ class Widget
 
 	function __construct($ident, $db)
 	{
+		$this->db = $db;
 		$this->ident = $ident;
 
 		$_settings = $db->query("SELECT name, value FROM {$this->ident}_settings")->fetchAll();
@@ -63,5 +64,13 @@ class Widget
 	public function getSetting($key)
 	{
 		return $this->settings[$key];
+	}
+
+	public function setSetting($key, $value)
+	{
+		if ($value != 'NOW()') {
+			$value = $this->db->quote($value);
+		}
+		$this->db->query("UPDATE {$this->ident}_settings SET value = {$value} WHERE name = {$this->db->quote($key)}");
 	}
 }
