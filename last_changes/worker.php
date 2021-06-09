@@ -30,7 +30,11 @@ $time = array(
 
 $langDb = getLangWikiDb($lang);
 
-$sql = "SELECT rc_cur_id page_id, rc_timestamp, rc_user, rc_namespace, rc_type
+echo 'start';
+$db->query("DELETE FROM {$prefix}categories_changes WHERE date < DATE_SUB(NOW(), INTERVAL 90 DAY)");
+echo 'finish';
+
+$sql = "SELECT rc_cur_id page_id, rc_timestamp, rc_actor as rc_user, rc_namespace, rc_type
   FROM recentchanges
   WHERE rc_namespace IN (0, 14, 10)
   AND rc_timestamp BETWEEN {$db->quote($time['from'])} AND {$db->quote($time['to'])}
@@ -126,3 +130,4 @@ function getWebPage( $url )
   $header['content'] = $content;
   return $header;
 }
+echo 'complete';

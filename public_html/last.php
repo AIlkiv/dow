@@ -55,6 +55,7 @@ $portals = [
   'Українська мова' => [
     'depth' => 1,
   ], 
+  'Норвегія' => [],
 ];
 
 
@@ -66,7 +67,7 @@ $dateTo = !empty($_GET['date_to']) ? date('Y-m-d', strtotime($_GET['date_to'])) 
 
 $curPortal = key($portal);
 if (!empty($_GET['portal'])) {
-  $curPortalData = getPage('https://tools.wmflabs.org/dow/api.php?'.http_build_query(['view' => 'cop', 'action' => 'get_settings', 'portal' => $_GET['portal']]));
+  $curPortalData = getPage('https://dow.toolforge.org/api.php?'.http_build_query(['view' => 'cop', 'action' => 'get_settings', 'portal' => $_GET['portal']]));
   if (empty($curPortalData)) {
     echo 'Unkonown portal';
     exit;
