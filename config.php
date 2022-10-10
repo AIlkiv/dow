@@ -16,16 +16,16 @@ $knownLangs = $settings['known_langs'] = array_unique(array_filter(explode('|', 
 
 function getRuningTasks()
 {
-	$s = `qstat -xml`;
-	$xml = new SimpleXMLElement($s);
-	$result = $xml->xpath('.//JB_name');
+        $s = `toolforge-jobs list`;
+        $rows = explode("\n", $s);
 
-	$tasks = [];
-	foreach ($result as $node) {
-		$tasks[] = $node;
-	}
-	
-	return $tasks;
+
+        $tasks = [];
+        foreach ($rows as $row) {
+                $tasks[] = explode(' ', $row, 2)[0];
+        }
+
+        return $tasks;
 }
 
 function checkLimitTasks($prefix, $limit)

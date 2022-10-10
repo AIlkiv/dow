@@ -19,12 +19,12 @@ switch ($pageListWidget->getSetting('status')) {
 		$langs = $db->query('SELECT lang FROM page_list_queue ORDER BY lang LIMIT 5')->fetchAll();
 
 		if (!empty($langs)) {
-			if (checkLimitTasks('page_list_', 5)) {
+			if (checkLimitTasks('page-list-', 5)) {
 				$langs = array_column($langs, 'lang');
 
 				foreach ($langs as $lang) {
 					$prefix = getDbPrefix($lang);
-					$cmd = "jsub -N page_list_{$prefix} -once -mem 4000m -l release=trusty php app/page_list/page_list.php {$lang}";
+					$cmd = "toolforge-jobs run page-list-{$prefix} --mem 4Gi --image tf-php74 --command \"php app/page_list/page_list.php {$lang}\"";
 					echo `$cmd`;
 				}
 			}

@@ -65,7 +65,7 @@ define('PAGE_NEW', 2);
 $dateFrom = !empty($_GET['date_from']) ? date('Y-m-d', strtotime($_GET['date_from'])) : date('Y-m-d', strtotime('-1 DAY'));
 $dateTo = !empty($_GET['date_to']) ? date('Y-m-d', strtotime($_GET['date_to'])) : date('Y-m-d');
 
-$curPortal = key($portal);
+$curPortal = key($portals);
 if (!empty($_GET['portal'])) {
   $curPortalData = getPage('https://dow.toolforge.org/api.php?'.http_build_query(['view' => 'cop', 'action' => 'get_settings', 'portal' => $_GET['portal']]));
   if (empty($curPortalData)) {
@@ -103,7 +103,7 @@ if (!empty($_GET['portal'])) {
   $langDb = getLangWikiDb('uk');
   $userIds = array_column($listRevisions, 'user_id');
   if (!empty($userIds)) {
-    $_users = $langDb->query('SELECT user_id, user_name FROM user WHERE user_id IN ('.implode(', ', $userIds).')')->fetchAll();
+    $_users = $langDb->query('SELECT actor_id user_id, actor_name user_name FROM actor WHERE actor_id IN ('.implode(', ', $userIds).')')->fetchAll();
     $users = [];
     foreach ($_users as $row) {
       $users[$row['user_id']] = $row['user_name'];

@@ -1,0 +1,4 @@
+toolforge-jobs run refresh-uk-wiki --command "php ./wikipedia_refresh/cron.php" --image tf-php74 --schedule "0 * * * *"
+toolforge-jobs run last-changes --command "php ./last_changes/worker.php" --image tf-php74 --schedule "*/30 * * * *"
+
+"toolforge-jobs run page-list-{$prefix} --mem 4Gi --image tf-php74 --command \"php app/page_list/page_list.php {$lang}\""
